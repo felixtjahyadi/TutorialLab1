@@ -21,7 +21,6 @@ from wishlist.views import json_id
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('example_app.urls')),
     path('wishlist/', include('wishlist.urls')),
     path('xml/', xml, name='xml'),
     path('json/', show_json, name='json'),
