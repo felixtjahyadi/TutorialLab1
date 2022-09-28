@@ -4,23 +4,41 @@
 <h5>Nama: </h5>
 <p>{{nama}}</p>
 
-<table>
+<nav class="navbar bg-light">
+    <div class="container-fluid">
+      <span class="navbar-text navbar-brand mb-0 h1">
+        Nama: {{nama}}
+        <button type="button" class="btn btn-outline-dark"><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+      </span>
+    </div>
+</nav>
+
+<table class="table table-striped-columns">
     <tr>
-    <th>Nama Barang</th>
-    <th>Harga Barang</th>
-    <th>Deskripsi</th>
+    <th class="table-dark">Nama Barang</th>
+    <th class="table-dark">Harga Barang</th>
+    <th class="table-dark">Deskripsi</th>
     </tr>
-    {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
+    <tbody class="table-group-divider">
     {% for barang in list_barang %}
     <tr>
-        <th>{{barang.nama_barang}}</th>
+        <th>
+            <p class="fw-normal text-decoration-underline">
+            {{barang.nama_barang}}
+            </p>
+        </th>
         <th>{{barang.harga_barang}}</th>
-        <th>{{barang.deskripsi}}</th>
+        <th>
+            <p class="fw-normal">
+            {{barang.deskripsi}}
+            </p>
+        </th>
     </tr>
 {% endfor %}
+</tbody>
 </table>
 
-<h5>Sesi terakhir login: {{ last_login }}</h5>
+<h5 class="text-uppercase">Sesi terakhir login: {{ last_login }}</h5>
 
 <button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
 
