@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from wishlist.forms import WishListForm
 
 @login_required(login_url='/wishlist/login/')
 def show_wishlist(request):
@@ -21,6 +22,28 @@ def show_wishlist(request):
     'last_login': request.COOKIES['last_login'],
 }
     return render(request, "wishlist.html", context)
+
+def show_wishlist_ajax(request):
+    context = {
+    'nama': 'Felix Tjahyadi',
+    }
+    return render(request, "wishlist_ajax.html", context)
+
+def wishlist_form(request):
+    if request.method == "POST":
+        form = WishListForm(request.POST)
+        if form.is_valid():
+            nama_barang = request.POST.get('nama_barang')
+            harga_barang = request.POST.get('harga_barang')
+            deskripsi = request.POST.get('deskripsi')
+            wishlist = BarangWishlist(nama_barang = nama_barang, harga_barang = harga_barang, deskripsi= deskripsi)
+            wishlist.save()
+            response = HttpResponseRedirect(reverse("wishlist:wishlist_form")) 
+            return response
+    else:
+        form = WishListForm()
+    
+    return render(request, 'wishlist_form.html', {'form':form})
 
 def xml(request):
     data = BarangWishlist.objects.all()

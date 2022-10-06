@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h5>Nama: </h5>
+<p>Felix Tjahyadi</p>
+
+<nav class="navbar bg-light">
+    <div class="container-fluid">
+      <span class="navbar-text navbar-brand mb-0 h1">
+        <button id="button1" class="btn btn-outline-dark">Load</button>
+      </span>
+    </div>
+</nav>
+
+<table class="table table-striped-columns" id="wishlist_table">
+    <tr>
+    <th class="table-dark">Nama Barang</th>
+    <th class="table-dark">Harga Barang</th>
+    <th class="table-dark">Deskripsi</th>
+    </tr>
+
+</table>
+
+<h5 class="text-uppercase">Sesi terakhir login: {{ last_login }}</h5>
+
+<button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+
+<script>
+  $(document).ready(function(){
+    $('#button1').click(function(){
+      $.get("../json/", function(data){
+          var wishlist_data = '';
+          $.each(data, function(key, value){
+              wishlist_data += '<tr>';
+              wishlist_data += '<td>'+ value.fields.nama_barang +'</td>';
+              wishlist_data += '<td>'+ value.fields.harga_barang +'</td>';
+              wishlist_data += '<td>'+ value.fields.deskripsi +'</td>';
+              wishlist_data += '</tr>';
+          });
+          $('#wishlist_table').append(wishlist_data);
+      });
+    });
+  });
+</script>
+
+<form id="form" method="POST" action="" class="">
+    {% csrf_token %}
+    <div>
+        <p>
+            Nama Barang:
+        </p>
+        {{form.nama_barang}}
+    </div>
+    <div>
+        <p>
+            Harga Barang:
+        </p>
+        {{form.harga_barang}}
+    </div>
+    <div>
+        <p>
+            Deskripsi Barang:
+        </p>
+        {{form.deskripsi}}
+    </div>
+    <input type="submit" name="submit" value="Submit"/>
+</form>
+
+<script>
+    $(document).ready(function(){
+        $("form").on("submit",function(event){
+            $.ajax({
+                url: '../json/', 
+                type : "POST",
+                dataType : 'json',
+                data : $("form").serialize(),
+            })
+        });
+    });
+</script>
+
+{% endblock content %}

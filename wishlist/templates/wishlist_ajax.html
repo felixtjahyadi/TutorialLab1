@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h5>Nama: </h5>
+<p>{{nama}}</p>
+
+<nav class="navbar bg-light">
+    <div class="container-fluid">
+      <span class="navbar-text navbar-brand mb-0 h1">
+        Nama: {{nama}}
+        <button type="button" class="btn btn-outline-dark">LoadData</button>
+      </span>
+    </div>
+</nav>
+
+<table class="table table-striped-columns" id="wishlist_table">
+    <tr>
+    <th class="table-dark">Nama Barang</th>
+    <th class="table-dark">Harga Barang</th>
+    <th class="table-dark">Deskripsi</th>
+    </tr>
+
+</table>
+
+<h5 class="text-uppercase">Sesi terakhir login: {{ last_login }}</h5>
+
+<button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+
+<script>
+  $(document).ready(function(){
+    $('button').click(function(){
+      $.get("../json/", function(data){
+          var wishlist_data = '';
+          $.each(data, function(key, value){
+              wishlist_data += '<tr>';
+              wishlist_data += '<td>'+ value.fields.nama_barang +'</td>';
+              wishlist_data += '<td>'+ value.fields.harga_barang +'</td>';
+              wishlist_data += '<td>'+ value.fields.deskripsi +'</td>';
+              wishlist_data += '</tr>';
+          });
+          $('#wishlist_table').append(wishlist_data);
+      });
+    });
+  });
+</script>
+
+{% endblock content %}
